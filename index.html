@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLDP Problem Statements 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #13162a;
+    --border: #1e2540;
+    --accent: #7c6aff;
+    --accent2: #ff6a8a;
+    --green: #4ade80;
+    --yellow: #fbbf24;
+    --blue: #60a5fa;
+    --text: #c9d1e8;
+    --muted: #5a6180;
+    --keyword: #c084fc;
+    --string: #86efac;
+    --number: #fcd34d;
+    --func: #67e8f9;
+    --comment: #4b5563;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .dot-row { display: flex; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  header h1 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  header span { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+  /* ── Layout ── */
+  .layout { display: flex; min-height: calc(100vh - 57px); }
+
+  /* ── Sidebar ── */
+  aside {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+    position: sticky;
+    top: 57px;
+    height: calc(100vh - 57px);
+    overflow-y: auto;
+  }
+  aside::-webkit-scrollbar { width: 4px; }
+  aside::-webkit-scrollbar-track { background: transparent; }
+  aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .sidebar-label { font-size: 9px; letter-spacing: 2px; color: var(--muted); padding: 0 16px 8px; text-transform: uppercase; }
+  .nav-item {
+    display: block;
+    padding: 7px 16px;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .15s;
+    border-left: 2px solid transparent;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(124,106,255,.06); border-left-color: var(--accent); }
+  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(124,106,255,.1); }
+
+  /* ── Main ── */
+  main { flex: 1; padding: 32px; max-width: 900px; }
+
+  /* ── Problem Block ── */
+  .problem {
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    scroll-margin-top: 72px;
+  }
+  .prob-header {
+    background: var(--surface);
+    padding: 14px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .prob-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--accent2);
+    background: rgba(255,106,138,.1);
+    border: 1px solid rgba(255,106,138,.25);
+    border-radius: 4px;
+    padding: 3px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .prob-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.5; }
+  pre {
+    background: #090b14;
+    padding: 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  pre::-webkit-scrollbar { height: 4px; }
+  pre::-webkit-scrollbar-track { background: transparent; }
+  pre::-webkit-scrollbar-thumb { background: var(--border); }
+
+  /* ── Syntax Highlight ── */
+  .kw { color: var(--keyword); }
+  .fn { color: var(--func); }
+  .st { color: var(--string); }
+  .nm { color: var(--number); }
+  .cm { color: var(--comment); font-style: italic; }
+  .bi { color: #fb923c; }  /* built-in */
+</style>
+</head>
+<body>
+
+<header>
+  <div class="dot-row"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+  <h1>PLDP Problem Statements 2026</h1>
+  <span>Python Lab</span>
+</header>
+
+<div class="layout">
+
+<aside>
+  <div class="sidebar-label">Problems</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = document.querySelectorAll('.problem');
+      const sidebar = document.querySelector('aside');
+      items.forEach((el, i) => {
+        const a = document.createElement('a');
+        a.className = 'nav-item';
+        a.textContent = `${i+1}. ${el.dataset.short}`;
+        a.onclick = () => { el.scrollIntoView({behavior:'smooth'}); };
+        sidebar.appendChild(a);
+      });
+      // Active highlight on scroll
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const idx = [...items].indexOf(e.target);
+            document.querySelectorAll('.nav-item')[idx]?.classList.add('active');
+          }
+        });
+      }, { threshold: 0.3 });
+      items.forEach(el => observer.observe(el));
+    });
+  </script>
+</aside>
+
+<main>
+
+<div class="problem" id="p1" data-short="Arithmetic Ops">
+  <div class="prob-header">
+    <span class="prob-num">#01</span>
+    <div class="prob-title">Accept two numbers and perform all arithmetic operations (+, −, ×, ÷, %, **). Display results in a formatted sentence.</div>
+  </div>
+  <pre><span class="nm">a</span> = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"Enter first number: "</span>))
+<span class="nm">b</span> = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"Enter second number: "</span>))
+<span class="bi">print</span>(<span class="st">f"Sum: <span class="nm">{a + b}</span>"</span>)
+<span class="bi">print</span>(<span class="st">f"Difference: <span class="nm">{a - b}</span>"</span>)
+<span class="bi">print</span>(<span class="st">f"Product: <span class="nm">{a * b}</span>"</span>)
+<span class="bi">print</span>(<span class="st">f"Division: <span class="nm">{a / b}</span>"</span>)
+<span class="bi">print</span>(<span class="st">f"Modulus: <span class="nm">{a % b}</span>"</span>)
+<span class="bi">print</span>(<span class="st">f"Power: <span class="nm">{a ** b}</span>"</span>)</pre>
+</div>
+
+<div class="problem" id="p2" data-short="Compound Interest">
+  <div class="prob-header">
+    <span class="prob-num">#02</span>
+    <div class="prob-title">Calculate compound interest using A = P(1 + r/n)^(nt) for user-input values.</div>
+  </div>
+  <pre><span class="nm">p</span> = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"enter the principal amount"</span>))
+<span class="nm">r</span> = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"enter interest"</span>))
+<span class="nm">n</span> = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"no of year in 12 months"</span>))
+<span class="nm">t</span> = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"time in years"</span>))
+<span class="nm">r</span> = r / <span class="nm">100</span>
+<span class="nm">z</span> = n * t
+<span class="nm">A</span> = p * (<span class="nm">1</span> + r / n) ** z
+<span class="bi">print</span>(A)</pre>
+</div>
+
+<div class="problem" id="p3" data-short="Even/Odd Sums">
+  <div class="prob-header">
+    <span class="prob-num">#03</span>
+    <div class="prob-title">Accept a list of numbers and find the sum of all even numbers and odd numbers separately.</div>
+  </div>
+  <pre><span class="nm">n</span> = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"enter the no"</span>))
+<span class="nm">number</span> = <span class="bi">list</span>(<span class="bi">range</span>(<span class="nm">1</span>, n + <span class="nm">1</span>))
+<span class="nm">even</span> = <span class="bi">sum</span>(num <span class="kw">for</span> num <span class="kw">in</span> number <span class="kw">if</span> num % <span class="nm">2</span> == <span class="nm">0</span>)
+<span class="nm">odd</span>  = <span class="bi">sum</span>(num <span class="kw">for</span> num <span class="kw">in</span> number <span class="kw">if</span> num % <span class="nm">2</span> != <span class="nm">0</span>)
+<span class="bi">print</span>(<span class="st">"even"</span>, even)
+<span class="bi">print</span>(<span class="st">"odd"</span>, odd)</pre>
+</div>
+
+<div class="problem" id="p4" data-short="Daily Expenses">
+  <div class="prob-header">
+    <span class="prob-num">#04</span>
+    <div class="prob-title">Accept a list of daily expenses and compute total, average, and maximum single-day expense.</div>
+  </div>
+  <pre><span class="nm">n</span> = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"Enter number of days: "</span>))
+<span class="nm">expenses</span> = []
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(n):
+    <span class="nm">amt</span> = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"Enter expense: "</span>))
+    expenses.append(amt)
+<span class="nm">total</span>   = <span class="bi">sum</span>(expenses)
+<span class="nm">average</span> = total / n
+<span class="nm">maximum</span> = <span class="bi">max</span>(expenses)
+<span class="bi">print</span>(<span class="st">"Total expense:"</span>, total)
+<span class="bi">print</span>(<span class="st">"Average expense:"</span>, average)
+<span class="bi">print</span>(<span class="st">"Maximum expense:"</span>, maximum)</pre>
+</div>
+
+<div class="problem" id="p5" data-short="Swap First & Last">
+  <div class="prob-header">
+    <span class="prob-num">#05</span>
+    <div class="prob-title">Accept a list of integers, swap the first and last elements, display before and after.</div>
+  </div>
+  <pre><span class="nm">name</span> = <span class="bi">list</span>(<span class="bi">input</span>(<span class="st">"enter the name"</span>))
+<span class="kw">if</span> <span class="bi">len</span>(name) > <span class="nm">1</span>:
+    <span class="nm">swapped</span> = [name[<span class="nm">-1</span>]] + name[<span class="nm">1</span>:<span class="nm">-1</span>] + [name[<span class="nm">0</span>]]
+<span class="kw">else</span>:
+    <span class="nm">swapped</span> = name
+<span class="bi">print</span>(swapped)</pre>
+</div>
+
+<div class="problem" id="p6" data-short="Swap Without Temp">
+  <div class="prob-header">
+    <span class="prob-num">#06</span>
+    <div class="prob-title">Accept two numbers and swap them without using a temporary variable.</div>
+  </div>
+  <pre><span class="nm">a</span> = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"Enter first number: "</span>))
+<span class="nm">b</span> = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"Enter second number: "</span>))
+<span class="bi">print</span>(<span class="st">"Before swapping:"</span>, a, b)
+a, b = b, a  <span class="cm"># swap without temporary variable</span>
+<span class="bi">print</span>(<span class="st">"After swapping:"</span>, a, b)</pre>
+</div>
+
+<div class="problem" id="p7" data-short="String Analysis">
+  <div class="prob-header">
+    <span class="prob-num">#07</span>
+    <div class="prob-title">Accept a string and display total characters, vowels, consonants, digits, and spaces.</div>
+  </div>
+  <pre><span class="nm">s</span> = <span class="bi">input</span>(<span class="st">"Enter a string: "</span>)
+<span class="nm">vowels</span> = <span class="nm">consonants</span> = <span class="nm">digits</span> = <span class="nm">spaces</span> = <span class="nm">0</span>
+<span class="kw">for</span> ch <span class="kw">in</span> s:
+    <span class="kw">if</span> ch.lower() <span class="kw">in</span> <span class="st">"aeiou"</span>:
+        vowels += <span class="nm">1</span>
+    <span class="kw">elif</span> ch.isalpha():
+        consonants += <span class="nm">1</span>
+    <span class="kw">elif</span> ch.isdigit():
+        digits += <span class="nm">1</span>
+    <span class="kw">elif</span> ch.isspace():
+        spaces += <span class="nm">1</span>
+<span class="bi">print</span>(<span class="st">"Total characters:"</span>, <span class="bi">len</span>(s))
+<span class="bi">print</span>(<span class="st">"Vowels:"</span>, vowels)
+<span class="bi">print</span>(<span class="st">"Consonants:"</span>, consonants)
+<span class="bi">print</span>(<span class="st">"Digits:"</span>, digits)
+<span class="bi">print</span>(<span class="st">"Spaces:"</span>, spaces)</pre>
+</div>
+
+<div class="problem" id="p8" data-short="Palindrome Check">
+  <div class="prob-header">
+    <span class="prob-num">#08</span>
+    <div class="prob-title">Accept a string and check whether it is a palindrome, ignoring case and spaces.</div>
+  </div>
+  <pre><span class="nm">s</span> = <span class="bi">input</span>(<span class="st">"Enter a string: "</span>)
+s = s.replace(<span class="st">" "</span>, <span class="st">""</span>).lower()  <span class="cm"># remove spaces and convert to lowercase</span>
+<span class="kw">if</span> s == s[::<span class="nm">-1</span>]:
+    <span class="bi">print</span>(<span class="st">"Palindrome"</span>)
+<span class="kw">else</span>:
+    <span class="bi">print</span>(<span class="st">"Not Palindrome"</span>)</pre>
+</div>
+
+<div class="problem" id="p9" data-short="Word Frequency">
+  <div class="prob-header">
+    <span class="prob-num">#09</span>
+    <div class="prob-title">Accept a sentence, count the frequency of each word, and display results in sorted order.</div>
+  </div>
+  <pre><span class="nm">s</span> = <span class="bi">input</span>().lower().split()
+<span class="kw">for</span> w <span class="kw">in</span> <span class="bi">sorted</span>(<span class="bi">set</span>(s)):
+    <span class="bi">print</span>(w, <span class="st">":"</span>, s.count(w))</pre>
+</div>
+
+<div class="problem" id="p10" data-short="NumPy Reshape">
+  <div class="prob-header">
+    <span class="prob-num">#10</span>
+    <div class="prob-title">Accept 12 integers, reshape into 3×4 and 4×3 matrices, display transpose, flattened, identity, and zero matrices.</div>
+  </div>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+nums = <span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>(<span class="st">"Enter 12 numbers: "</span>).split()))
+<span class="nm">arr</span> = np.array(nums)
+<span class="nm">a</span> = arr.reshape(<span class="nm">3</span>, <span class="nm">4</span>)
+<span class="nm">b</span> = arr.reshape(<span class="nm">4</span>, <span class="nm">3</span>)
+<span class="bi">print</span>(<span class="st">"3x4 matrix:\n"</span>, a)
+<span class="bi">print</span>(<span class="st">"4x3 matrix:\n"</span>, b)
+<span class="bi">print</span>(<span class="st">"Transpose:\n"</span>, a.T)
+<span class="bi">print</span>(<span class="st">"Flattened:"</span>, arr.flatten())
+<span class="bi">print</span>(<span class="st">"Identity matrix:\n"</span>, np.eye(a.shape[<span class="nm">0</span>]))
+<span class="bi">print</span>(<span class="st">"Zero matrix:\n"</span>, np.zeros((a.shape[<span class="nm">0</span>], a.shape[<span class="nm">0</span>])))</pre>
+</div>
+
+<div class="problem" id="p11" data-short="Matrix Operations">
+  <div class="prob-header">
+    <span class="prob-num">#11</span>
+    <div class="prob-title">Create two 3×3 NumPy matrices, perform addition and multiplication, find row and column sums.</div>
+  </div>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="nm">a</span> = np.array(<span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>().split()))).reshape(<span class="nm">3</span>, <span class="nm">3</span>)
+<span class="nm">b</span> = np.array(<span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>().split()))).reshape(<span class="nm">3</span>, <span class="nm">3</span>)
+<span class="nm">z</span> = a + b
+<span class="bi">print</span>(<span class="st">"Addition:\n"</span>, z)
+<span class="bi">print</span>(<span class="st">"Row sum:"</span>, z.sum(<span class="nm">1</span>))
+<span class="bi">print</span>(<span class="st">"Column sum:"</span>, z.sum(<span class="nm">0</span>))
+<span class="nm">p</span> = np.dot(a, b)
+<span class="bi">print</span>(<span class="st">"Multiplication:\n"</span>, p)
+<span class="bi">print</span>(<span class="st">"Row sum:"</span>, p.sum(<span class="nm">1</span>))
+<span class="bi">print</span>(<span class="st">"Column sum:"</span>, p.sum(<span class="nm">0</span>))</pre>
+</div>
+
+<div class="problem" id="p12" data-short="Array Stats">
+  <div class="prob-header">
+    <span class="prob-num">#12</span>
+    <div class="prob-title">Accept a 1D NumPy array of 10+ numbers. Compute stats, extract above-mean values, replace negatives with 0.</div>
+  </div>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="nm">arr</span> = np.array(<span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>(<span class="st">"Enter numbers: "</span>).split())))
+<span class="bi">print</span>(<span class="st">"Mean:"</span>, np.mean(arr))
+<span class="bi">print</span>(<span class="st">"Median:"</span>, np.median(arr))
+<span class="bi">print</span>(<span class="st">"Std Dev:"</span>, np.std(arr))
+<span class="bi">print</span>(<span class="st">"Min:"</span>, np.min(arr))
+<span class="bi">print</span>(<span class="st">"Max:"</span>, np.max(arr))
+<span class="bi">print</span>(<span class="st">"Above mean:"</span>, arr[arr > np.mean(arr)])
+<span class="bi">print</span>(<span class="st">"After replacing negatives:"</span>, np.where(arr &lt; <span class="nm">0</span>, <span class="nm">0</span>, arr))</pre>
+</div>
+
+<div class="problem" id="p13" data-short="Broadcasting">
+  <div class="prob-header">
+    <span class="prob-num">#13</span>
+    <div class="prob-title">Create two 1D arrays. Compute dot product, element-wise multiplication. Apply broadcasting and cumulative sum.</div>
+  </div>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="nm">a</span> = np.array(<span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>(<span class="st">"Enter first array: "</span>).split())))
+<span class="nm">b</span> = np.array(<span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>(<span class="st">"Enter second array: "</span>).split())))
+<span class="bi">print</span>(<span class="st">"Dot product:"</span>, np.dot(a, b))
+<span class="bi">print</span>(<span class="st">"Element-wise:"</span>, a * b)
+<span class="nm">m</span> = np.array(<span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>(<span class="st">"Enter 2D array (6 values): "</span>).split()))).reshape(<span class="nm">2</span>, <span class="nm">3</span>)
+<span class="nm">res</span> = m + a[:<span class="nm">3</span>]
+<span class="bi">print</span>(<span class="st">"After broadcasting:\n"</span>, res)
+<span class="bi">print</span>(<span class="st">"Cumulative sum:"</span>, np.cumsum(res))</pre>
+</div>
+
+<div class="problem" id="p14" data-short="Merge Dicts">
+  <div class="prob-header">
+    <span class="prob-num">#14</span>
+    <div class="prob-title">Create two dictionaries for personal and academic details, merge them, and display all details.</div>
+  </div>
+  <pre><span class="nm">p</span> = {<span class="st">"name"</span>: <span class="bi">input</span>(), <span class="st">"age"</span>: <span class="bi">input</span>()}
+<span class="nm">a</span> = {<span class="st">"course"</span>: <span class="bi">input</span>(), <span class="st">"marks"</span>: <span class="bi">input</span>()}
+p.update(a)
+<span class="bi">print</span>(p)</pre>
+</div>
+
+<div class="problem" id="p15" data-short="Dict Merge & Sort">
+  <div class="prob-header">
+    <span class="prob-num">#15</span>
+    <div class="prob-title">Accept two dictionaries with overlapping keys. Merge by summing common keys, sort by values.</div>
+  </div>
+  <pre><span class="nm">d1</span> = {<span class="st">'a'</span>: <span class="nm">10</span>, <span class="st">'b'</span>: <span class="nm">20</span>}
+<span class="nm">d2</span> = {<span class="st">'b'</span>: <span class="nm">5</span>,  <span class="st">'c'</span>: <span class="nm">15</span>}
+<span class="kw">for</span> k <span class="kw">in</span> d2:
+    d1[k] = d1.get(k, <span class="nm">0</span>) + d2[k]
+<span class="nm">s</span> = <span class="bi">sorted</span>(d1, key=d1.get)
+<span class="bi">print</span>({k: d1[k] <span class="kw">for</span> k <span class="kw">in</span> s})</pre>
+</div>
+
+<div class="problem" id="p16" data-short="Heap K Elements">
+  <div class="prob-header">
+    <span class="prob-num">#16</span>
+    <div class="prob-title">Accept a tuple and K. Find max K and min K elements using heapq. Display sum and average.</div>
+  </div>
+  <pre><span class="kw">import</span> heapq
+<span class="nm">t</span> = <span class="bi">tuple</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>(<span class="st">"Enter numbers: "</span>).split()))
+<span class="nm">k</span> = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"Enter K: "</span>))
+<span class="nm">max_k</span> = heapq.nlargest(k, t)
+<span class="nm">min_k</span> = heapq.nsmallest(k, t)
+<span class="bi">print</span>(<span class="st">"Max K elements:"</span>, max_k)
+<span class="bi">print</span>(<span class="st">"Min K elements:"</span>, min_k)
+<span class="bi">print</span>(<span class="st">"Sum of max K:"</span>, <span class="bi">sum</span>(max_k), <span class="st">"Average:"</span>, <span class="bi">sum</span>(max_k) / k)
+<span class="bi">print</span>(<span class="st">"Sum of min K:"</span>, <span class="bi">sum</span>(min_k), <span class="st">"Average:"</span>, <span class="bi">sum</span>(min_k) / k)</pre>
+</div>
+
+<div class="problem" id="p17" data-short="Bubble Sort">
+  <div class="prob-header">
+    <span class="prob-num">#17</span>
+    <div class="prob-title">Accept a list of integers and sort using Bubble Sort. Display the number of passes required.</div>
+  </div>
+  <pre><span class="nm">arr</span> = []
+<span class="nm">n</span> = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"Enter number of elements: "</span>))
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(n):
+    arr.append(<span class="bi">int</span>(<span class="bi">input</span>()))
+<span class="nm">n</span> = <span class="bi">len</span>(arr)
+<span class="nm">p</span> = <span class="nm">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(n):
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(<span class="nm">0</span>, n - i - <span class="nm">1</span>):  <span class="cm"># Bubble Sort</span>
+        <span class="kw">if</span> arr[j] > arr[j + <span class="nm">1</span>]:
+            arr[j], arr[j + <span class="nm">1</span>] = arr[j + <span class="nm">1</span>], arr[j]
+            p += <span class="nm">1</span>
+<span class="bi">print</span>(arr)
+<span class="bi">print</span>(<span class="st">"Passes:"</span>, p)</pre>
+</div>
+
+<div class="problem" id="p18" data-short="Selection Sort">
+  <div class="prob-header">
+    <span class="prob-num">#18</span>
+    <div class="prob-title">Accept student records as (name, marks) tuples. Sort descending using Selection Sort. Display top 3.</div>
+  </div>
+  <pre><span class="nm">a</span> = []
+<span class="nm">n</span> = <span class="bi">int</span>(<span class="bi">input</span>())
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(n):
+    <span class="nm">name</span>  = <span class="bi">input</span>()
+    <span class="nm">marks</span> = <span class="bi">int</span>(<span class="bi">input</span>())
+    a.append((name, marks))
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(n):          <span class="cm"># selection sort (descending by marks)</span>
+    <span class="nm">max_i</span> = i
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(i + <span class="nm">1</span>, n):
+        <span class="kw">if</span> a[j][<span class="nm">1</span>] > a[max_i][<span class="nm">1</span>]:
+            <span class="nm">max_i</span> = j
+    a[i], a[max_i] = a[max_i], a[i]
+<span class="bi">print</span>(<span class="st">"Top 3:"</span>, a[:<span class="nm">3</span>])</pre>
+</div>
+
+<div class="problem" id="p19" data-short="Binary Search">
+  <div class="prob-header">
+    <span class="prob-num">#19</span>
+    <div class="prob-title">Accept a sorted list and target. Search using Binary Search and display index + number of comparisons.</div>
+  </div>
+  <pre><span class="nm">lst</span> = <span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>().split()))
+<span class="nm">x</span> = <span class="bi">int</span>(<span class="bi">input</span>())
+<span class="nm">l</span>, <span class="nm">h</span>, <span class="nm">c</span> = <span class="nm">0</span>, <span class="bi">len</span>(lst) - <span class="nm">1</span>, <span class="nm">0</span>
+<span class="kw">while</span> l &lt;= h:
+    <span class="nm">m</span> = (l + h) // <span class="nm">2</span>
+    c += <span class="nm">1</span>
+    <span class="kw">if</span> lst[m] == x:
+        <span class="bi">print</span>(m)
+        <span class="kw">break</span>
+    <span class="kw">elif</span> x &lt; lst[m]:
+        h = m - <span class="nm">1</span>
+    <span class="kw">else</span>:
+        l = m + <span class="nm">1</span>
+<span class="kw">else</span>:
+    <span class="bi">print</span>(<span class="st">"Not found"</span>)
+<span class="bi">print</span>(c)</pre>
+</div>
+
+<div class="problem" id="p20" data-short="Linear & Interpolation">
+  <div class="prob-header">
+    <span class="prob-num">#20</span>
+    <div class="prob-title">Find all positions using Linear Search, then sort and search using Interpolation Search. Compare results.</div>
+  </div>
+  <pre><span class="nm">lst</span> = <span class="bi">list</span>(<span class="bi">map</span>(<span class="bi">int</span>, <span class="bi">input</span>(<span class="st">"Enter list: "</span>).split()))
+<span class="nm">x</span>   = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"Enter target: "</span>))
+<span class="nm">pos</span> = [i <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(lst)) <span class="kw">if</span> lst[i] == x]
+<span class="bi">print</span>(<span class="st">"Linear:"</span>, pos <span class="kw">if</span> pos <span class="kw">else</span> <span class="st">"Not found"</span>)
+lst.sort()
+<span class="nm">l</span>, <span class="nm">h</span>, <span class="nm">idx</span> = <span class="nm">0</span>, <span class="bi">len</span>(lst) - <span class="nm">1</span>, <span class="nm">-1</span>
+<span class="kw">while</span> l &lt;= h <span class="kw">and</span> lst[l] != lst[h]:
+    <span class="nm">p</span> = l + (x - lst[l]) * (h - l) // (lst[h] - lst[l])
+    <span class="kw">if</span> p &lt; <span class="nm">0</span> <span class="kw">or</span> p >= <span class="bi">len</span>(lst): <span class="kw">break</span>
+    <span class="kw">if</span> lst[p] == x:
+        idx = p; <span class="kw">break</span>
+    <span class="kw">elif</span> lst[p] &lt; x: l = p + <span class="nm">1</span>
+    <span class="kw">else</span>: h = p - <span class="nm">1</span>
+<span class="bi">print</span>(<span class="st">"Interpolation:"</span>, idx <span class="kw">if</span> idx != <span class="nm">-1</span> <span class="kw">else</span> <span class="st">"Not found"</span>)</pre>
+</div>
+
+<div class="problem" id="p21" data-short="File Analysis">
+  <div class="prob-header">
+    <span class="prob-num">#21</span>
+    <div class="prob-title">Read a text file, count characters, words, lines, vowels, consonants, digits, and punctuation.</div>
+  </div>
+  <pre><span class="nm">f</span> = <span class="bi">open</span>(<span class="st">"file.txt"</span>, <span class="st">"r"</span>)
+<span class="nm">text</span> = f.read()
+f.close()
+<span class="nm">chars</span> = <span class="bi">len</span>(text)
+<span class="nm">words</span> = <span class="bi">len</span>(text.split())
+<span class="nm">lines</span> = text.count(<span class="st">"\n"</span>) + <span class="nm">1</span>
+<span class="nm">v</span> = <span class="nm">c</span> = <span class="nm">d</span> = <span class="nm">p</span> = <span class="nm">0</span>
+<span class="kw">for</span> ch <span class="kw">in</span> text:
+    <span class="kw">if</span> ch.lower() <span class="kw">in</span> <span class="st">"aeiou"</span>: v += <span class="nm">1</span>
+    <span class="kw">elif</span> ch.isalpha():          c += <span class="nm">1</span>
+    <span class="kw">elif</span> ch.isdigit():          d += <span class="nm">1</span>
+    <span class="kw">elif</span> ch <span class="kw">not in</span> <span class="st">" \n"</span>:     p += <span class="nm">1</span>
+<span class="bi">print</span>(<span class="st">"Characters:"</span>, chars)
+<span class="bi">print</span>(<span class="st">"Words:"</span>, words)
+<span class="bi">print</span>(<span class="st">"Lines:"</span>, lines)
+<span class="bi">print</span>(<span class="st">"Vowels:"</span>, v)
+<span class="bi">print</span>(<span class="st">"Consonants:"</span>, c)
+<span class="bi">print</span>(<span class="st">"Digits:"</span>, d)
+<span class="bi">print</span>(<span class="st">"Punctuation:"</span>, p)</pre>
+</div>
+
+<div class="problem" id="p22" data-short="Word Freq File">
+  <div class="prob-header">
+    <span class="prob-num">#22</span>
+    <div class="prob-title">Read a text file, display word frequency in sorted order, longest/shortest word, and most frequent word.</div>
+  </div>
+  <pre><span class="nm">f</span> = <span class="bi">open</span>(<span class="st">"file.txt"</span>, <span class="st">"r"</span>)
+<span class="nm">words</span> = f.read().lower().split()
+f.close()
+words.sort()
+<span class="kw">for</span> w <span class="kw">in</span> <span class="bi">set</span>(words):
+    <span class="bi">print</span>(w, <span class="st">":"</span>, words.count(w))
+<span class="nm">longest</span>  = <span class="bi">max</span>(words, key=<span class="bi">len</span>)
+<span class="nm">shortest</span> = <span class="bi">min</span>(words, key=<span class="bi">len</span>)
+<span class="nm">most</span>     = <span class="bi">max</span>(<span class="bi">set</span>(words), key=words.count)
+<span class="bi">print</span>(<span class="st">"Longest:"</span>, longest)
+<span class="bi">print</span>(<span class="st">"Shortest:"</span>, shortest)
+<span class="bi">print</span>(<span class="st">"Most frequent:"</span>, most)</pre>
+</div>
+
+<div class="problem" id="p23" data-short="Employee Class">
+  <div class="prob-header">
+    <span class="prob-num">#23</span>
+    <div class="prob-title">Create an Employee class with bonus, retirement eligibility, and yearly salary methods. Filter and sort 5 employees.</div>
+  </div>
+  <pre><span class="kw">class</span> <span class="fn">Employee</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, n, a, d, s):
+        self.name, self.age, self.dept, self.salary = n, a, d, s
+    <span class="kw">def</span> <span class="fn">bonus</span>(self, p):
+        self.salary += self.salary * p / <span class="nm">100</span>
+    <span class="kw">def</span> <span class="fn">retire</span>(self):
+        <span class="kw">return</span> self.age >= <span class="nm">60</span>
+    <span class="kw">def</span> <span class="fn">yearly</span>(self):
+        <span class="kw">return</span> self.salary * <span class="nm">12</span>
+<span class="nm">emp</span> = []
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nm">5</span>):
+    n = <span class="bi">input</span>(<span class="st">"Name: "</span>)
+    a = <span class="bi">int</span>(<span class="bi">input</span>(<span class="st">"Age: "</span>))
+    d = <span class="bi">input</span>(<span class="st">"Dept: "</span>)
+    s = <span class="bi">float</span>(<span class="bi">input</span>(<span class="st">"Salary: "</span>))
+    e = <span class="fn">Employee</span>(n, a, d, s)
+    e.bonus(<span class="nm">10</span>)
+    emp.append(e)
+<span class="nm">dept</span> = <span class="bi">input</span>(<span class="st">"Enter dept to filter: "</span>)
+<span class="nm">f</span> = [e <span class="kw">for</span> e <span class="kw">in</span> emp <span class="kw">if</span> e.dept == dept]
+f.sort(key=<span class="kw">lambda</span> x: x.salary, reverse=<span class="kw">True</span>)
+<span class="kw">for</span> e <span class="kw">in</span> f:
+    <span class="bi">print</span>(e.name, e.age, e.dept, e.salary, <span class="st">"Retire:"</span>, e.retire())</pre>
+</div>
+
+<div class="problem" id="p24" data-short="Pandas DataFrame">
+  <div class="prob-header">
+    <span class="prob-num">#24</span>
+    <div class="prob-title">Create a student DataFrame with missing values. Fill with column mean, group by Subject, export to CSV.</div>
+  </div>
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="nm">df</span> = pd.DataFrame({
+    <span class="st">"Name"</span>: [<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>,<span class="st">"D"</span>,<span class="st">"E"</span>,<span class="st">"F"</span>,<span class="st">"G"</span>,<span class="st">"H"</span>,<span class="st">"I"</span>,<span class="st">"J"</span>],
+    <span class="st">"Subject"</span>: [<span class="st">"Math"</span>,<span class="st">"Sci"</span>,<span class="st">"Math"</span>,<span class="st">"Eng"</span>,<span class="st">"Sci"</span>,
+                <span class="st">"Eng"</span>,<span class="st">"Math"</span>,<span class="st">"Sci"</span>,<span class="st">"Eng"</span>,<span class="st">"Math"</span>],
+    <span class="st">"Marks"</span>: [<span class="nm">80</span>,<span class="nm">90</span>,np.nan,<span class="nm">70</span>,<span class="nm">85</span>,np.nan,<span class="nm">75</span>,<span class="nm">95</span>,<span class="nm">60</span>,<span class="nm">88</span>]
+})
+df[<span class="st">"Marks"</span>].fillna(df[<span class="st">"Marks"</span>].mean(), inplace=<span class="kw">True</span>)
+<span class="nm">res</span> = df.groupby(<span class="st">"Subject"</span>)[<span class="st">"Marks"</span>].mean()
+<span class="bi">print</span>(res)
+res.to_csv(<span class="st">"output.csv"</span>)</pre>
+</div>
+
+<div class="problem" id="p25" data-short="Matplotlib & Seaborn">
+  <div class="prob-header">
+    <span class="prob-num">#25</span>
+    <div class="prob-title">Plot a multi-line chart, Seaborn heatmap of correlation matrix, and bar chart of total annual sales. Save all plots.</div>
+  </div>
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+<span class="nm">df</span> = pd.DataFrame({
+    <span class="st">"Month"</span>: [<span class="st">"Jan"</span>,<span class="st">"Feb"</span>,<span class="st">"Mar"</span>,<span class="st">"Apr"</span>,<span class="st">"May"</span>,<span class="st">"Jun"</span>],
+    <span class="st">"A"</span>: [<span class="nm">100</span>,<span class="nm">120</span>,<span class="nm">130</span>,<span class="nm">90</span>,<span class="nm">150</span>,<span class="nm">170</span>],
+    <span class="st">"B"</span>: [<span class="nm">80</span>,<span class="nm">110</span>,<span class="nm">140</span>,<span class="nm">100</span>,<span class="nm">160</span>,<span class="nm">180</span>],
+    <span class="st">"C"</span>: [<span class="nm">90</span>,<span class="nm">100</span>,<span class="nm">120</span>,<span class="nm">110</span>,<span class="nm">140</span>,<span class="nm">160</span>]
+})
+<span class="cm"># Line chart</span>
+df.plot(x=<span class="st">"Month"</span>, y=[<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>], marker=<span class="st">'o'</span>)
+plt.title(<span class="st">"Monthly Sales"</span>); plt.xlabel(<span class="st">"Month"</span>); plt.ylabel(<span class="st">"Sales"</span>); plt.grid()
+plt.savefig(<span class="st">"line.png"</span>); plt.show()
+<span class="cm"># Heatmap</span>
+sns.heatmap(df[[<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>]].corr(), annot=<span class="kw">True</span>)
+plt.title(<span class="st">"Correlation Heatmap"</span>); plt.savefig(<span class="st">"heatmap.png"</span>); plt.show()
+<span class="cm"># Bar chart</span>
+df[[<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>]].sum().plot(kind=<span class="st">"bar"</span>)
+plt.title(<span class="st">"Total Annual Sales"</span>); plt.xlabel(<span class="st">"Product"</span>); plt.ylabel(<span class="st">"Sales"</span>)
+plt.savefig(<span class="st">"bar.png"</span>); plt.show()</pre>
+</div>
+
+</main>
+</div>
+</body>
+</html>
